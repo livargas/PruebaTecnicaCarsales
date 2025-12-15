@@ -1,0 +1,26 @@
+<dialog #dialog class="character-modal" (click)="onBackdropClick($event)">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    @if (character(); as char) {
+    <div class="modal-image-container">
+      <img [src]="char.image" [alt]="char.name" class="modal-image">
+    </div>
+    <div class="modal-character-info">
+      <h2 class="modal-character-title">{{ char.name }}</h2>
+      <div class="modal-character-info-grid">
+        <div><span class="modal-character-info-label">Estado:</span> <span class="modal-character-info-value"
+            [class]="char.status.toLowerCase()">{{ char.status
+            }}</span></div>
+        <div><span class="modal-character-info-label">Especie:</span> <span class="modal-character-info-value">{{
+            char.species }}</span></div>
+        <div><span class="modal-character-info-label">Género:</span> <span class="modal-character-info-value">{{
+            char.gender }}</span></div>
+        <div><span class="modal-character-info-label">Origen:</span> <span class="modal-character-info-value">{{
+            char.origin.name }}</span></div>
+        <div><span class="modal-character-info-label">Ubicación:</span> <span class="modal-character-info-value">{{
+            char.location.name }}</span></div>
+      </div>
+    </div>
+    <button class="modal-close-btn" (click)="onClose()">&times;</button>
+    }
+  </div>
+</dialog>

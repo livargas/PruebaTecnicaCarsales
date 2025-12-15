@@ -1,0 +1,4 @@
+<div class="search-container">
+  <input type="text" placeholder="Buscar episodios..." class="search-input" [value]="searchQuery()"
+    (input)="searchQuery.set($any($event.target).value)" />
+</div>

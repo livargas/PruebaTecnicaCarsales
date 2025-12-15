@@ -1,0 +1,37 @@
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  padding: 0 2rem;
+  width: 100dvw;
+}
+
+.header-content h2 {
+  margin: 0;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    cursor: pointer;
+    background: linear-gradient(0deg,
+        var(--color-secondary) 0%,
+        #39ff14 50%,
+        var(--color-primary) 100%);
+    background-size: 100% 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: portalEffect 2s infinite linear;
+  }
+}
+
+@keyframes portalEffect {
+  0% {
+    background-position: 0% 100%;
+  }
+
+  100% {
+    background-position: 0% 0%;
+  }
+}

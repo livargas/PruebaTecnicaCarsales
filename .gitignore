@@ -1,0 +1,5 @@
+# General workspace ignores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,55 @@
+<div>
+  <div class="title-container">
+    <h1>Episodios</h1>
+
+    <app-pagination [currentPage]="currentPage()" [totalPages]="episodeService.totalPages()"
+      (pageChange)="onPageChange($event)">
+    </app-pagination>
+    <app-search-input (search)="search.set($event)"></app-search-input>
+  </div>
+
+
+  @if (episodeService.loading()) {
+  <div class="loading">Cargando episodios...</div>
+  } @else if (episodeService.error()) {
+  <div class="loading-error">{{ episodeService.error() }}</div>
+  } @else if (episodeService.episodes().length > 0) {
+  <div class="episodes-grid">
+    @for (episode of episodeService.episodes() | searchFilter: search(); track episode.id) {
+    <div [id]="'episode-' + episode.id" class="episode-card" [class.expanded]="expandedEpisodeId() === episode.id">
+      <h3>{{ episode.name }}</h3>
+      <p class="episode-code">{{ episode.episode }}</p>
+      <p class="air-date">Emisión: {{ episode.air_date | date: 'longDate' }}</p>
+      <button class="more-info-btn" [style.display]="expandedEpisodeId() === episode.id ? 'none' : 'block'"
+        (click)="onEpisodeClick(episode.id)">Ver más</button>
+
+      @if (expandedEpisodeId() === episode.id) {
+      @defer (on immediate) {
+      <p>Personajes ({{ episode.fullCharacters.length }})</p>
+      <div class="characters-container">
+        @for (character of episode.fullCharacters; track $index) {
+        <div class="character-card" (click)="onCharacterClick(character)">
+          <img [ngSrc]="character.image" width="150" height="150" [alt]="'character-'+ character.name"
+            class="character-image"
+            [style.view-transition-name]="activeTransitionCharacter() === character.name ? 'character-image' : 'none'">
+          <p class="character-name">{{ character.name }}</p>
+        </div>
+        }
+      </div>
+      }
+      }
+    </div>
+    }
+    @empty {
+    <div class="no-results">
+      <h2>No se encontraron resultados para "{{ search() }}"</h2>
+      <p>Intenta buscar algo diferente</p>
+    </div>
+    }
+  </div>
+  }
+</div>
+
+@defer (when selectedCharacter(); prefetch on idle) {
+<app-character-modal [character]="selectedCharacter()" (close)="closeDialog()"></app-character-modal>
+}

@@ -1,0 +1,107 @@
+:root {
+  --color-bg-dark: #0b0c10;
+  --color-bg-card: rgba(31, 40, 51, 0.85);
+  --color-primary: #97ce4c;
+  --color-primary-glow: #b2e47b;
+  --color-secondary: #00b5cc;
+  --color-accent: #e89ac7;
+  --color-brand-red: #ac0000;
+
+  --color-text-main: #f0f6fc;
+  --color-text-muted: #8b949e;
+  --color-border: #30363d;
+
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 4rem;
+
+  --glass-bg: rgba(22, 27, 34, 0.6);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-main);
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary);
+}
+
+button {
+  font-family: var(--font-heading);
+}
+
+.grid-container {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  width: 100dvw;
+  z-index: 1000;
+  background: var(--color-bg-dark);
+  box-shadow: var(--glass-shadow);
+  padding: 10px;
+  grid-row: 1 / 2;
+  border-bottom: 1px solid;
+  border-color: var(--color-text-main);
+}
+
+footer {
+  background: var(--color-bg-dark);
+  margin-top: auto;
+  grid-row: 3 / 4;
+  padding: 10px;
+  color: var(--color-text-muted);
+  border-top: 1px solid;
+  border-color: var(--color-text-main);
+}
+
+main {
+  padding: 20px;
+  grid-row: 2 / 3;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-secondary) var(--color-bg-dark);
+}
+
+main::-webkit-scrollbar {
+  width: 8px;
+}
+
+main::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
+}
+
+main::-webkit-scrollbar-thumb {
+  background-color: var(--color-secondary);
+  border-radius: 4px;
+}

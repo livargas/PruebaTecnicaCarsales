@@ -11,20 +11,22 @@ namespace PruebaTecnicaCarsales.Services
     public class EpisodeService : IEpisodeService
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
-        private readonly ICharacterService _characterService;
+
+        private readonly IEpisodeMapper _episodeMapper;
+        private readonly ICharacterEnricher _episodeEnricher;
         private readonly ILogger<EpisodeService> _logger;
         private readonly string _baseUrl;
 
         public EpisodeService(
             HttpClient httpClient,
             IConfiguration configuration,
-            ICharacterService characterService,
+            IEpisodeMapper episodeMapper,
+            ICharacterEnricher episodeEnricher,
             ILogger<EpisodeService> logger)
         {
             _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
-            _characterService = characterService ?? throw new ArgumentNullException(nameof(characterService));
+            _episodeMapper = episodeMapper ?? throw new ArgumentNullException(nameof(episodeMapper));
+            _episodeEnricher = episodeEnricher ?? throw new ArgumentNullException(nameof(episodeEnricher));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
             _baseUrl = configuration["RickAndMortyApi:BaseUrl"]
@@ -39,7 +41,7 @@ namespace PruebaTecnicaCarsales.Services
 
                 _logger.LogInformation("Solicitando episodios de la API: {Uri}", requestUri);
 
-                var data = await _httpClient.GetFromJsonAsync<ApiResponse<EpisodeDto>>(requestUri);
+                var data = await _httpClient.GetFromJsonAsync<ApiResponse<Episode>>(requestUri);
 
                 if (data?.Results == null)
                 {
@@ -53,24 +55,9 @@ namespace PruebaTecnicaCarsales.Services
                     };
                 }
 
-                var episodes = data.Results.Select(episode => new EpisodeDto
-                {
-                    Id = episode.Id,
-                    Name = episode.Name,
-                    AirDate = episode.AirDate,
-                    EpisodeCode = episode.EpisodeCode,
-                    Characters = episode.Characters ?? [],
-                    CreatedAt = episode.CreatedAt,
-                    fullCharacters = new List<CharacterDto>(),
-                    Url = episode.Url
-                }).ToList();
+                var episodes = _episodeMapper.MapToDtoList(data.Results);
 
-                var characterDetailTasks = episodes.Select(async episode =>
-                {
-                    episode.fullCharacters = await _characterService.GetCharactersAsync(episode.Characters!);
-                }).ToList();
-
-                await Task.WhenAll(characterDetailTasks);
+                await _episodeEnricher.EnrichEpisodesWithCharactersAsync(episodes);
 
                 return new EpisodeResponse<EpisodeDto>
                 {
@@ -83,17 +70,7 @@ namespace PruebaTecnicaCarsales.Services
             catch (HttpRequestException ex)
             {
                 _logger.LogError(ex, "Error HTTP al obtener los episodios de la API. URI: {Uri}", $"{_baseUrl}/episode?page={pageNumber}");
-                throw new Exception($"¡Wubba Lubba Dub Dub!, Error en la comunicación con el servicio externo (RickAndMorty API): {ex.Message}", ex);
-            }
-            catch (InvalidOperationException ex) when (ex.Message.Contains("BaseUrl"))
-            {
-                _logger.LogCritical(ex, "Error de configuración crítico: La URL base de la API no está definida.");
-                throw;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Ocurrió un error inesperado al procesar la solicitud de episodios.");
-                throw new ApplicationException("¡Wubba Lubba Dub Dub!, Ocurrió un error inesperado al obtener los episodios.", ex);
+                throw new Exception($"¡Wubba Lubba Dub Dub!, Error en la comunicación con el servicio externo (RickAndMorty API)", ex);
             }
         }
     }

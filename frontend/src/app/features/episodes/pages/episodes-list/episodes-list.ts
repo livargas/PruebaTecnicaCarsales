@@ -7,6 +7,7 @@ import { Pagination } from '@shared/components/pagination/pagination';
 import { SearchInputComponent } from '@shared/components/search-input/search-input';
 import { SearchFilterPipe } from '@shared/pipes/search-filter.pipe';
 import { CharacterModalComponent } from '@features/episodes/components/character-modal/character-modal.component';
+import { AppConstants } from '@app/core/constants/app.constants';
 
 @Component({
   selector: 'app-episodes-list',
@@ -48,7 +49,7 @@ export class EpisodesListComponent {
         const element = this.document.getElementById('episode-' + id);
 
         if (element && this.mainContent) {
-          const headerOffset = 20;
+          const headerOffset = AppConstants.UI.HEADER_OFFSET;
           const elementRect = element.getBoundingClientRect();
           const mainRect = this.mainContent.getBoundingClientRect();
 
@@ -60,7 +61,7 @@ export class EpisodesListComponent {
             behavior: 'smooth'
           });
         }
-      }, 100);
+      }, AppConstants.UI.SCROLL_DELAY);
     }
   }
 
@@ -108,7 +109,7 @@ export class EpisodesListComponent {
       setTimeout(() => {
         observer.disconnect();
         resolve();
-      }, 1000);
+      }, AppConstants.UI.VIEW_TRANSITION_TIMEOUT);
     });
   }
 }

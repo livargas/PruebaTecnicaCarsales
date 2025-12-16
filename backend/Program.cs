@@ -1,5 +1,7 @@
 using PruebaTecnicaCarsales.Interfaces;
 using PruebaTecnicaCarsales.Services;
+using PruebaTecnicaCarsales.Mappers;
+using PruebaTecnicaCarsales.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +13,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IEpisodeService, EpisodeService>();
 builder.Services.AddHttpClient<ICharacterService, CharacterService>();
+builder.Services.AddScoped<IEpisodeMapper, EpisodeMapper>();
+builder.Services.AddScoped<ICharacterEnricher, CharacterEnricher>();
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

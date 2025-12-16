@@ -13,8 +13,6 @@ namespace PruebaTecnicaCarsales.DTOs
         public required string EpisodeCode { get; set; }
         public List<string>? Characters { get; set; }
         public required string Url { get; set; }
-        [JsonPropertyName("created")]
-        public required string CreatedAt { get; set; }
         public List<CharacterDto>? fullCharacters { get; set; } = [];
     }
 }

@@ -1,6 +1,6 @@
 ﻿using PruebaTecnicaCarsales.DTOs;
 using PruebaTecnicaCarsales.Interfaces;
-using System.Text.Json; // Se sigue usando si es necesario para el manejo dinámico, pero GetFromJsonAsync es mejor
+using System.Text.Json;
 
 namespace PruebaTecnicaCarsales.Services
 {

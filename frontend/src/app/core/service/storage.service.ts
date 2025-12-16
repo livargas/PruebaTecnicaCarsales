@@ -19,7 +19,7 @@ export class StorageService {
       if (this.isBrowser) {
         localStorage.setItem(key, jsonValue);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Error guardando ${key} en local storage`, error);
     }
   }
@@ -30,7 +30,7 @@ export class StorageService {
         return value ? JSON.parse(value) : null;
       }
       return null;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(`Error leyendo ${key} de local storage`, error);
       return null;
     }

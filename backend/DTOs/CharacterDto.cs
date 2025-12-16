@@ -13,13 +13,7 @@ namespace PruebaTecnicaCarsales.DTOs
         public required Origin Origin { get; set; }
         public required Location Location { get; set; }
         public required string Image { get; set; }
-        [JsonPropertyName("episode")]
-        public List<string> Episodes { get; set; } = [];
         public required string Url { get; set; }
-        [JsonPropertyName("created")]
-        public required string CreatedAt { get; set; }
-
-
     }
 
     public class Origin
